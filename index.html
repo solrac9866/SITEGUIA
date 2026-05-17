@@ -8,10 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  /* ===========================================================
-     CONFIGURAÇÃO — edite a URL abaixo após publicar o Apps Script
-     =========================================================== */
-
   :root {
     --tinta: #1a1a1a;
     --papel: #f4f1ea;
@@ -40,18 +36,13 @@
     padding: 32px 20px 80px;
   }
 
-  .container {
-    max-width: 760px;
-    margin: 0 auto;
-  }
+  .container { max-width: 760px; margin: 0 auto; }
 
-  /* === Cabeçalho === */
   header {
     border-top: 4px solid var(--linha);
     border-bottom: 1px solid var(--linha);
     padding: 28px 0 24px;
     margin-bottom: 36px;
-    position: relative;
   }
 
   .eyebrow {
@@ -72,23 +63,11 @@
     font-variation-settings: "opsz" 144;
   }
 
-  h1 em {
-    font-style: italic;
-    font-weight: 400;
-    color: var(--vermelho);
-  }
+  h1 em { font-style: italic; font-weight: 400; color: var(--vermelho); }
 
-  .sub {
-    margin-top: 16px;
-    font-size: 16px;
-    max-width: 560px;
-    color: #444;
-  }
+  .sub { margin-top: 16px; font-size: 16px; max-width: 560px; color: #444; }
 
-  /* === Seções === */
-  .secao {
-    margin-bottom: 32px;
-  }
+  .secao { margin-bottom: 32px; }
 
   .num {
     font-family: 'JetBrains Mono', monospace;
@@ -106,16 +85,9 @@
     margin-bottom: 6px;
   }
 
-  .ajuda {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 12px;
-    font-style: italic;
-  }
+  .ajuda { font-size: 14px; color: #555; margin-bottom: 12px; font-style: italic; }
 
-  input[type="text"],
-  input[type="password"],
-  textarea {
+  input[type="text"], textarea {
     width: 100%;
     padding: 14px 16px;
     background: #fff;
@@ -127,51 +99,15 @@
     transition: border-color .15s, box-shadow .15s;
   }
 
-  input[type="text"]:focus,
-  input[type="password"]:focus,
-  textarea:focus {
+  input[type="text"]:focus, textarea:focus {
     outline: none;
     border-color: var(--vermelho);
     box-shadow: 3px 3px 0 var(--linha);
   }
 
-  textarea {
-    min-height: 240px;
-    resize: vertical;
-    line-height: 1.5;
-  }
+  textarea { min-height: 240px; resize: vertical; line-height: 1.5; }
+  .pequeno { min-height: auto; }
 
-  .pequeno {
-    min-height: auto;
-  }
-
-  /* === Configurações (expansível) === */
-  details {
-    background: var(--papel-2);
-    border: 1.5px solid var(--linha);
-    padding: 16px 20px;
-    margin-bottom: 32px;
-  }
-
-  details summary {
-    cursor: pointer;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-
-  details[open] summary {
-    margin-bottom: 18px;
-  }
-
-  details label {
-    font-size: 15px;
-    margin-top: 14px;
-  }
-
-  /* === Botão === */
   button {
     display: block;
     width: 100%;
@@ -198,20 +134,10 @@
     transition: transform .2s;
   }
 
-  button:hover:not(:disabled) {
-    background: var(--vermelho);
-  }
+  button:hover:not(:disabled) { background: var(--vermelho); }
+  button:hover:not(:disabled)::after { transform: translateY(-50%) translateX(6px); }
+  button:disabled { background: #888; cursor: not-allowed; }
 
-  button:hover:not(:disabled)::after {
-    transform: translateY(-50%) translateX(6px);
-  }
-
-  button:disabled {
-    background: #888;
-    cursor: not-allowed;
-  }
-
-  /* === Status / resultado === */
   #status {
     margin-top: 28px;
     padding: 20px;
@@ -221,7 +147,6 @@
   }
 
   #status.ativo { display: block; }
-
   #status.carregando { border-color: var(--azul); background: #eef3fb; }
   #status.sucesso { border-color: #2d7a2d; background: #f0f8f0; }
   #status.erro { border-color: var(--vermelho); background: #fbeded; }
@@ -257,13 +182,8 @@
 
   #status a:hover { background: var(--vermelho); }
 
-  /* === Loader === */
-  .pontos {
-    display: inline-block;
-  }
-  .pontos span {
-    animation: piscar 1.4s infinite;
-  }
+  .pontos { display: inline-block; }
+  .pontos span { animation: piscar 1.4s infinite; }
   .pontos span:nth-child(2) { animation-delay: .2s; }
   .pontos span:nth-child(3) { animation-delay: .4s; }
   @keyframes piscar {
@@ -271,7 +191,6 @@
     30% { opacity: 1; }
   }
 
-  /* === Rodapé === */
   footer {
     margin-top: 60px;
     padding-top: 20px;
@@ -294,20 +213,6 @@
     <p class="sub">Cole o Escopo Sequência do seu bimestre. A IA estrutura, justifica e devolve o documento pronto na sua pasta do Drive.</p>
   </header>
 
-  <!-- CONFIGURAÇÃO (chaves) -->
-  <details>
-    <summary>⚙ Configuração (preencher 1 vez)</summary>
-
-    <label for="apiKey">Chave da API Gemini</label>
-    <div class="ajuda">Pega em <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>. Fica salva só no seu navegador.</div>
-    <input type="password" id="apiKey" placeholder="AIza...">
-
-    <label for="webAppUrl">URL do Apps Script (Web App)</label>
-    <div class="ajuda">Termina em <code>/exec</code>. Aparece quando você publica o Apps Script.</div>
-    <input type="text" id="webAppUrl" placeholder="https://script.google.com/macros/s/.../exec">
-  </details>
-
-  <!-- ENTRADA -->
   <section class="secao">
     <div class="num">01 — IDENTIFICAÇÃO</div>
     <label for="nomeProfessor">Seu nome completo</label>
@@ -326,40 +231,32 @@
   <div id="status"></div>
 
   <footer>
-    <strong>Consultoria do Carl</strong> · Ferramenta de uso pessoal · v1.0
+    <strong>Consultoria do Carl</strong> · Uso pessoal · v1.2
   </footer>
 
 </div>
 
 <script>
-/* ============================================================
-   ESTADO E PERSISTÊNCIA
-   ============================================================ */
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║   Configuração (repositório PRIVADO)                         ║
+   ╚══════════════════════════════════════════════════════════════╝ */
+
+const CHAVE_GEMINI    = 'AIzaSyDLhWOEu2ry9xT6S123OFKaEzknXid1Bww';
+const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbx6gfGmR6XwBw0O8ZvFXQX_P8KosNfZr4ShmDZ5KpkxoXqNxsGjY46dTMRMEdZWofzp/exec';
+
+/* ══════════════════════════════════════════════════════════════ */
+
 
 const $ = (id) => document.getElementById(id);
 
-// Carrega as chaves salvas no navegador, se existirem
 window.addEventListener('DOMContentLoaded', () => {
-  $('apiKey').value = localStorage.getItem('gemini_key') || '';
-  $('webAppUrl').value = localStorage.getItem('webapp_url') || '';
   $('nomeProfessor').value = localStorage.getItem('nome_prof') || '';
 });
 
-// Salva conforme o usuário digita
-['apiKey', 'webAppUrl', 'nomeProfessor'].forEach(id => {
-  $(id).addEventListener('change', () => {
-    const map = {
-      apiKey: 'gemini_key',
-      webAppUrl: 'webapp_url',
-      nomeProfessor: 'nome_prof'
-    };
-    localStorage.setItem(map[id], $(id).value.trim());
-  });
+$('nomeProfessor').addEventListener('change', () => {
+  localStorage.setItem('nome_prof', $('nomeProfessor').value.trim());
 });
 
-/* ============================================================
-   STATUS UI
-   ============================================================ */
 
 function mostrarStatus(tipo, titulo, html) {
   const box = $('status');
@@ -370,9 +267,6 @@ function mostrarStatus(tipo, titulo, html) {
   `;
 }
 
-/* ============================================================
-   CHAMADA À GEMINI
-   ============================================================ */
 
 const PROMPT_SISTEMA = `Você é um especialista em planejamento pedagógico da rede pública paulista (SEDUC-SP), com domínio do Currículo Paulista, da BNCC e do modelo das Escolas de Tempo Integral (PEI).
 
@@ -380,27 +274,35 @@ Sua tarefa: analisar o Escopo Sequência colado pelo professor e devolver um JSO
 
 REGRAS:
 1. Identifique automaticamente componente curricular, série e bimestre a partir do texto.
-2. Para a JUSTIFICATIVA: escreva um texto pedagógico de 4-6 linhas conectando os objetos de conhecimento do bimestre com o desenvolvimento integral do estudante, mencionando habilidades-chave do Currículo Paulista.
-3. Para a APROXIMACAO_REALIDADE: escreva 3-5 linhas mostrando como os conteúdos do bimestre se conectam com situações concretas do cotidiano do adolescente paulista (trabalho, consumo, tecnologia, redes sociais, mundo do trabalho).
-4. Para TITULOS_AULAS, CONTEUDOS_AULAS e OBJETIVOS_AULAS: extraia do escopo e organize em formato concatenado, separando cada aula por dois espaços. Use exatamente o padrão "Aula 1: ...  Aula 2: ...  Aula 3: ..." (com dois espaços entre aulas).
-5. Para CRITERIOS_AVALIACAO: liste 4-6 critérios alinhados ao bimestre, em linguagem PEI (protagonismo, autoria, pertencimento). Use formato corrido, separados por ponto-final.
+
+2. JUSTIFICATIVA: escreva um texto pedagógico de 4-6 linhas conectando os objetos de conhecimento do bimestre com o desenvolvimento integral do estudante, mencionando habilidades-chave do Currículo Paulista.
+
+3. APROXIMACAO: escreva 3-5 linhas mostrando como os conteúdos do bimestre se conectam com situações concretas do cotidiano do adolescente paulista (trabalho, consumo, tecnologia, redes sociais, mundo do trabalho).
+
+4. TITULOS_AULAS, CONTEUDOS_AULAS e OBJETIVOS_AULAS: extraia do escopo TODAS as aulas. CADA AULA EM UMA LINHA SEPARADA, usando \\n (caractere de quebra de linha) entre uma aula e outra. Formato exato:
+   "Aula 1: ...\\nAula 2: ...\\nAula 3: ..."
+   NÃO use espaços duplos. NÃO concatene aulas na mesma linha. Use SEMPRE \\n entre elas.
+
+5. CRITERIOS_AVALIACAO: liste 4-6 critérios alinhados ao bimestre, em linguagem PEI (protagonismo, autoria, pertencimento). Cada critério em uma linha, separados por \\n.
+
 6. Devolva APENAS um JSON válido, sem markdown, sem \`\`\`, sem nenhum texto antes ou depois.
 
 FORMATO DA RESPOSTA (JSON estrito):
 {
   "COMPONENTE": "string em CAIXA ALTA",
-  "SERIE": "string ex: 2ª Série",
+  "SERIE": "string ex: 2ª Série ou 6º Ano",
   "BIMESTRE": "string ex: 2º",
   "JUSTIFICATIVA": "string",
   "APROXIMACAO": "string",
-  "TITULOS_AULAS": "string",
-  "CONTEUDOS_AULAS": "string",
-  "OBJETIVOS_AULAS": "string",
-  "CRITERIOS_AVALIACAO": "string"
+  "TITULOS_AULAS": "string com \\n entre aulas",
+  "CONTEUDOS_AULAS": "string com \\n entre aulas",
+  "OBJETIVOS_AULAS": "string com \\n entre aulas",
+  "CRITERIOS_AVALIACAO": "string com \\n entre critérios"
 }`;
 
-async function chamarGemini(apiKey, escopo) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+async function chamarGemini(escopo) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${CHAVE_GEMINI}`;
 
   const body = {
     contents: [{
@@ -434,13 +336,9 @@ async function chamarGemini(apiKey, escopo) {
   }
 }
 
-/* ============================================================
-   CHAMADA AO APPS SCRIPT
-   ============================================================ */
 
-async function chamarAppsScript(webAppUrl, dados) {
-  // Apps Script aceita POST com Content-Type text/plain sem preflight CORS
-  const resp = await fetch(webAppUrl, {
+async function chamarAppsScript(dados) {
+  const resp = await fetch(URL_APPS_SCRIPT, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify(dados),
@@ -458,19 +356,11 @@ async function chamarAppsScript(webAppUrl, dados) {
   return resultado;
 }
 
-/* ============================================================
-   FLUXO PRINCIPAL
-   ============================================================ */
 
 $('gerar').addEventListener('click', async () => {
-  const apiKey = $('apiKey').value.trim();
-  const webAppUrl = $('webAppUrl').value.trim();
   const nomeProfessor = $('nomeProfessor').value.trim();
   const escopo = $('escopo').value.trim();
 
-  // Validação
-  if (!apiKey) return mostrarStatus('erro', '⚠ Faltou', 'Configure a chave da API Gemini (expanda a seção ⚙ Configuração).');
-  if (!webAppUrl) return mostrarStatus('erro', '⚠ Faltou', 'Configure a URL do Apps Script (expanda a seção ⚙ Configuração).');
   if (!nomeProfessor) return mostrarStatus('erro', '⚠ Faltou', 'Digite seu nome completo.');
   if (!escopo || escopo.length < 100) return mostrarStatus('erro', '⚠ Faltou', 'Cole o Escopo Sequência completo (parece curto demais).');
 
@@ -479,19 +369,16 @@ $('gerar').addEventListener('click', async () => {
   botao.textContent = 'Processando...';
 
   try {
-    // Passo 1: Gemini analisa e estrutura
     mostrarStatus('carregando', '◷ Etapa 1 de 2', 'Gemini analisando o Escopo Sequência<span class="pontos"><span>.</span><span>.</span><span>.</span></span>');
-    const camposGerados = await chamarGemini(apiKey, escopo);
+    const camposGerados = await chamarGemini(escopo);
 
-    // Passo 2: Apps Script gera o documento no Drive
     mostrarStatus('carregando', '◷ Etapa 2 de 2', 'Criando o documento no Google Drive<span class="pontos"><span>.</span><span>.</span><span>.</span></span>');
     const dadosCompletos = {
       NOME_PROFESSOR: nomeProfessor,
       ...camposGerados
     };
-    const resultado = await chamarAppsScript(webAppUrl, dadosCompletos);
+    const resultado = await chamarAppsScript(dadosCompletos);
 
-    // Sucesso
     mostrarStatus('sucesso', '✓ Pronto',
       `<p>Guia gerado: <strong>${resultado.nomeArquivo}</strong></p>
        <a href="${resultado.linkDocumento}" target="_blank">Abrir documento</a>
