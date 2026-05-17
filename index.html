@@ -172,7 +172,7 @@
   }
 
   button:hover:not(:disabled) { background: var(--vermelho); }
-  button:hover:not(:disabled):::after { transform: translateY(-50%) translateX(6px); }
+  button:hover:not(:disabled)::after { transform: translateY(-50%) translateX(6px); }
   button:disabled { background: #888; cursor: not-allowed; }
 
   #status {
@@ -253,4 +253,69 @@
   <details>
     <summary>⚙ Configuração (preencher 1 vez)</summary>
     <label for="apiKey">Chave da API Gemini</label>
-    <div class="ajuda">
+    <div class="ajuda">Pega em <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>. Fica salva só no seu navegador.</div>
+    <input type="password" id="apiKey" placeholder="AIza...">
+    <label for="webAppUrl">URL do Apps Script (Web App)</label>
+    <div class="ajuda">Termina em <code>/exec</code>. Aparece quando você publica o Apps Script.</div>
+    <input type="text" id="webAppUrl" placeholder="https://script.google.com/macros/s/.../exec">
+  </details>
+
+  <section class="secao">
+    <div class="num">01 — IDENTIFICAÇÃO</div>
+    <label for="nomeProfessor">Seu nome completo</label>
+    <input type="text" id="nomeProfessor" class="pequeno" placeholder="Ex: Carlos Roberto de Jesus dos Santos">
+  </section>
+
+  <section class="secao">
+    <div class="num">02 — ESCOPO SEQUÊNCIA</div>
+    <label for="escopo">Cole aqui o Escopo Sequência do bimestre</label>
+    <div class="ajuda">Cole o conteúdo bruto que você recebeu da SEDUC/CMSP. A IA vai identificar componente, série, bimestre, aulas, conteúdos e habilidades automaticamente.</div>
+    <textarea id="escopo" placeholder="Cole aqui o texto completo do Escopo Sequência..."></textarea>
+  </section>
+
+  <button id="gerar">Gerar Guia de Aprendizagem</button>
+  <div id="status"></div>
+
+  <footer>
+    <strong>Consultoria do Carl</strong> · Ferramenta de uso pessoal · v1.0
+  </footer>
+
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+window.addEventListener('DOMContentLoaded', () => {
+  $('apiKey').value = localStorage.getItem('gemini_key') || '';
+  $('webAppUrl').value = localStorage.getItem('webapp_url') || '';
+  $('nomeProfessor').value = localStorage.getItem('nome_prof') || '';
+});
+
+['apiKey', 'webAppUrl', 'nomeProfessor'].forEach(id => {
+  $(id).addEventListener('change', () => {
+    const map = {
+      apiKey: 'gemini_key',
+      webAppUrl: 'webapp_url',
+      nomeProfessor: 'nome_prof'
+    };
+    localStorage.setItem(map[id], $(id).value.trim());
+  });
+});
+
+function mostrarStatus(tipo, titulo, html) {
+  const box = $('status');
+  box.className = 'ativo ' + tipo;
+  box.innerHTML = `
+    <div class="status-titulo ${tipo}">${titulo}</div>
+    <div>${html}</div>
+  `;
+}
+
+const PROMPT_SISTEMA = `Você é um especialista em planejamento pedagógico da rede pública paulista (SEDUC-SP), com domínio do Currículo Paulista, da BNCC e do modelo das Escolas de Tempo Integral (PEI).
+Sua tarefa: analisar o Escopo Sequência colado pelo professor e devolver um JSON com os campos para preencher o Guia de Aprendizagem.
+REGRAS:
+1. Identifique automaticamente componente curricular, série e bimestre a partir do texto.
+2. Para a JUSTIFICATIVA: escreva um texto pedagógico de 4-6 linhas conectando os objetos de conhecimento do bimestre com o desenvolvimento integral do estudante, mencionando habilidades-chave do Currículo Paulista.
+3. Para a APROXIMACAO_REALIDADE: escreva 3-5 linhas mostrando como os conteúdos do bimestre se conectam com situações concretas do cotidiano do adolescente paulista (trabalho, consumo, tecnologia, redes sociais, mundo do trabalho).
+4. Para TITULOS_AULAS, CONTEUDOS_AULAS e OBJETIVOS_AULAS: extraia do escopo e organize em formato concatenado, separando cada aula por dois espaços. Use exatamente o padrão "Aula 1: ...  Aula 2: ...  Aula 3: ..." (com dois espaços entre aulas).
+5. Para CRITERIOS_AVALIACAO: liste 4-6 critérios alinhados ao bimestre, em linguagem PEI (protagonismo, autoria, pertencimento). Use formato corrido, separados
