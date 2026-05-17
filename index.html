@@ -315,89 +315,9 @@ const PROMPT_SISTEMA = `Você é um especialista em planejamento pedagógico da 
 Sua tarefa: analisar o Escopo Sequência colado pelo professor e devolver um JSON com os campos para preencher o Guia de Aprendizagem.
 REGRAS:
 1. Identifique automaticamente componente curricular, série e bimestre a partir do texto.
-2. Para a JUSTIFICATIVA: escreva um texto pedagógico de 4-6 linhas conectando os objetos de conhecimento do bimestre com o desenvolvimento integral do estudante, mencionando habilidades-chave do Currículo Paulista.
+2. Para a JUSTIFICATIVA: escreva um texto pedagógico de 4-6 linhas conectando os objetos de conhecimento do bimestre com o desenvolvimento integral do estudante, mentioning habilidades-chave do Currículo Paulista.
 3. Para a APROXIMACAO_REALIDADE: escreva 3-5 linhas mostrando como os conteúdos do bimestre se conectam com situações concretas do cotidiano do adolescente paulista (trabalho, consumo, tecnologia, redes sociais, mundo do trabalho).
 4. Para TITULOS_AULAS, CONTEUDOS_AULAS e OBJETIVOS_AULAS: extraia do escopo e organize em formato concatenado, separando cada aula por dois espaços. Use exatamente o padrão "Aula 1: ...  Aula 2: ...  Aula 3: ..." (com dois espaços entre aulas).
 5. Para CRITERIOS_AVALIACAO: liste 4-6 critérios alinhados ao bimestre, em linguagem PEI (protagonismo, autoria, pertencimento). Use formato corrido, separados por ponto-final.
 6. Devolva APENAS um JSON válido, sem markdown, sem \`\`\`, sem nenhum texto antes ou depois.
-FORMATO DA RESPOSTA (JSON estrito):
-{
-  "COMPONENTE": "string em CAIXA ALTA",
-  "SERIE": "string ex: 2ª Série",
-  "BIMESTRE": "string ex: 2º",
-  "JUSTIFICATIVA": "string",
-  "APROXIMACAO": "string",
-  "TITULOS_AULAS": "string",
-  "CONTEUDOS_AULAS": "string",
-  "OBJETIVOS_AULAS": "string",
-  "CRITERIOS_AVALIACAO": "string"
-}`;
-
-async function chamarGemini(apiKey, escopo) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`;
-  const body = {
-    contents: [{ parts: [{ text: `${PROMPT_SISTEMA}\n\n--- ESCOPO SEQUÊNCIA COLADO PELO PROFESSOR ---\n\n${escopo}` }] }],
-    generationConfig: { temperature: 0.4, responseMimeType: "application/json" }
-  };
-  const resp = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  if (!resp.ok) {
-    const erroTexto = await resp.text();
-    throw new Error(`Gemini retornou ${resp.status}: ${erroTexto}`);
-  }
-  const data = await resp.json();
-  const texto = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!texto) throw new Error('Gemini não retornou texto');
-  try {
-    return JSON.parse(texto);
-  } catch (e) {
-    throw new Error('Gemini retornou JSON inválido: ' + texto.slice(0, 200));
-  }
-}
-
-async function chamarAppsScript(webAppUrl, dados) {
-  const resp = await fetch(webAppUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(dados), redirect: 'follow' });
-  if (!resp.ok) throw new Error(`Apps Script retornou ${resp.status}`);
-  const resultado = await resp.json();
-  if (!resultado.sucesso) throw new Error('Apps Script falhou: ' + resultado.erro);
-  return resultado;
-}
-
-$('gerar').addEventListener('click', async () => {
-  const apiKey = $('apiKey').value.trim();
-  const webAppUrl = $('webAppUrl').value.trim();
-  const nomeProfessor = $('nomeProfessor').value.trim();
-  const escopo = $('escopo').value.trim();
-
-  if (!apiKey) return mostrarStatus('erro', '⚠ Faltou', 'Configure a chave da API Gemini (expanda a seção ⚙ Configuração).');
-  if (!webAppUrl) return mostrarStatus('erro', '⚠ Faltou', 'Configure a URL do Apps Script (expanda a seção ⚙ Configuração).');
-  if (!nomeProfessor) return mostrarStatus('erro', '⚠ Faltou', 'Digite seu nome completo.');
-  if (!escopo || escopo.length < 100) return mostrarStatus('erro', '⚠ Faltou', 'Cole o Escopo Sequência completo (parece curto demais).');
-
-  const botao = $('gerar');
-  botao.disabled = true;
-  botao.textContent = 'Processando...';
-
-  try {
-    mostrarStatus('carregando', '◷ Etapa 1 de 2', 'Gemini analisando o Escopo Sequência<span class="pontos"><span>.</span><span>.</span><span>.</span></span>');
-    const camposGerados = await chamarGemini(apiKey, escopo);
-
-    mostrarStatus('carregando', '◷ Etapa 2 de 2', 'Criando o documento no Google Drive<span class="pontos"><span>.</span><span>.</span><span>.</span></span>');
-    const dadosCompletos = { NOME_PROFESSOR: nomeProfessor, ...camposGerados };
-    const resultado = await chamarAppsScript(webAppUrl, dadosCompletos);
-
-    mostrarStatus('sucesso', '✓ Pronto',
-      `<p>Guia gerado: <strong>${resultado.nomeArquivo}</strong></p>
-       <a href="${resultado.linkDocumento}" target="_blank">Abrir documento</a>
-       <a href="${resultado.linkPasta}" target="_blank">Abrir pasta</a>`
-    );
-  } catch (erro) {
-    console.error(erro);
-    mostrarStatus('erro', '✗ Erro', erro.message);
-  } finally {
-    botao.disabled = false;
-    botao.textContent = 'Gerar Guia de Aprendizagem';
-  }
-});
-</script>
-</body>
-</html>
+FORMATO DA RESPOSTA (JSON est
