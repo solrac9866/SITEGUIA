@@ -31,14 +31,15 @@
     font-family: 'Inter', -apple-system, sans-serif;
     font-size: 16px;
     line-height: 1.6;
-    min-height: 100vh;
+    height: auto; /* Correção para permitir a rolagem livre */
   }
 
   body {
     background-image:
       radial-gradient(circle at 0% 0%, rgba(74, 144, 217, 0.08), transparent 40%),
       radial-gradient(circle at 100% 100%, rgba(30, 91, 184, 0.06), transparent 50%);
-    padding: 0 0 60px;
+    padding: 0 0 120px; /* Espaço extra no final para o formulário respirar */
+    overflow-y: auto;    /* Garante e força a barra de rolagem vertical */
   }
 
   /* ===== CABEÇALHO ===== */
@@ -462,4 +463,45 @@
   <div class="destaque">
     <div class="destaque-icone">i</div>
     <div class="destaque-texto">
-      <strong>É só copiar e colar.</strong> O sistema aceita tanto o <strong>Guia Priorizado</strong> quanto o <strong>Escopo Sequência</strong> — qualquer componente curricular, qualquer série, qualquer bimestre. Não precisa preencher campos extras, não
+      <strong>É só copiar e colar.</strong> O sistema aceita tanto o <strong>Guia Priorizado</strong> quanto o <strong>Escopo Sequência</strong> — qualquer componente curricular, qualquer série, qualquer bimestre. Não precisa preencher campos extras, não precisa organizar o texto. Apenas cole e gere.
+    </div>
+  </div>
+
+  <div class="form-card">
+
+    <section class="secao">
+      <div class="secao-num">PASSO 1</div>
+      <label for="nomeProfessor">Seu nome completo</label>
+      <div class="ajuda">Aparece no campo "Professor" do Guia. Fica salvo no seu navegador — você só preenche uma vez.</div>
+      <input type="text" id="nomeProfessor" class="pequeno" placeholder="Ex: Carlos Roberto de Jesus dos Santos">
+    </section>
+
+    <section class="secao">
+      <div class="secao-num">PASSO 2</div>
+      <label for="escopo">Cole aqui o Guia Priorizado ou o Escopo Sequência</label>
+      <div class="ajuda">Selecione todo o conteúdo do bimestre e cole abaixo. Pode ser o texto inteiro, com listas, títulos, habilidades — <strong>do jeito que veio</strong>. A IA organiza pra você.</div>
+      <textarea id="escopo" placeholder="Cole aqui o conteúdo completo do Guia Priorizado ou Escopo Sequência..."></textarea>
+    </section>
+
+    <button id="gerar">Gerar Guia de Aprendizagem</button>
+
+    <div id="status"></div>
+
+  </div>
+
+  <div class="assinatura">
+    <div class="assinatura-linha"></div>
+    <div class="assinatura-credito">Desenvolvido pelo</div>
+    <div class="assinatura-nome">Professor Carlos</div>
+    <div class="assinatura-titulo">CONSULTORIA DO CARL</div>
+  </div>
+
+</div>
+
+<script>
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║               Configuração do Sistema Seguro                 ║
+   ╚══════════════════════════════════════════════════════════════╝ */
+
+const URL_API_PROXY   = '/api/gerar-guia';
+const URL_APPS_SCRIPT = '
