@@ -31,15 +31,15 @@
     font-family: 'Inter', -apple-system, sans-serif;
     font-size: 16px;
     line-height: 1.6;
-    height: auto; /* Correção para permitir a rolagem livre */
+    height: auto;
   }
 
   body {
     background-image:
       radial-gradient(circle at 0% 0%, rgba(74, 144, 217, 0.08), transparent 40%),
       radial-gradient(circle at 100% 100%, rgba(30, 91, 184, 0.06), transparent 50%);
-    padding: 0 0 120px; /* Espaço extra no final para o formulário respirar */
-    overflow-y: auto;    /* Garante e força a barra de rolagem vertical */
+    padding: 0 0 120px;
+    overflow-y: auto;
   }
 
   /* ===== CABEÇALHO ===== */
@@ -504,4 +504,154 @@
    ╚══════════════════════════════════════════════════════════════╝ */
 
 const URL_API_PROXY   = '/api/gerar-guia';
-const URL_APPS_SCRIPT = '
+const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbx6gfGmR6XwBw0O8ZvFXQX_P8KosNfZr4ShmDZ5KpkxoXqNxsGjY46dTMRMEdZWofzp/exec';
+
+/* ══════════════════════════════════════════════════════════════ */
+
+const $ = (id) => document.getElementById(id);
+
+window.addEventListener('DOMContentLoaded', () => {
+  $('nomeProfessor').value = localStorage.getItem('nome_prof') || '';
+});
+
+function mostrarStatus(tipo, titulo, html) {
+  const box = $('status');
+  box.className = 'ativo ' + tipo;
+  box.innerHTML = `
+    <div class="status-titulo ${tipo}">${titulo}</div>
+    <div>${html}</div>
+  `;
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+const PROMPT_SISTEMA = `Você é um especialista em planejamento pedagógico da rede pública paulista (SEDUC-SP), com domínio do Currículo Paulista, da BNCC e do modelo das Escolas de Tempo Integral (PEI).
+
+Sua tarefa: analisar o Guia Priorizado ou Escopo Sequência colado pelo professor e devolver um JSON com os campos para preencher o Guia de Aprendizagem.
+
+REGRAS:
+1. Identifique automaticamente componente curricular, série e bimestre a partir do texto.
+
+2. JUSTIFICATIVA: escreva um texto pedagógico de 4-6 linhas conectando os objetos de conhecimento do bimestre com o desenvolvimento integral do estudante, mencionando habilidades-chave do Currículo Paulista.
+
+3. APROXIMACAO: escreva 3-5 linhas mostrando como os conteúdos do bimestre se conectam com situações concretas do cotidiano do estudante paulista (trabalho, consumo, tecnologia, redes sociais, mundo do trabalho).
+
+4. TITULOS_AULAS, CONTEUDOS_AULAS e OBJETIVOS_AULAS: extraia do escopo TODAS as aulas. CADA AULA EM UMA LINHA SEPARADA, usando \\n (caractere de quebra de linha) entre uma aula e outra. Formato exato:
+   "Aula 1: ...\\nAula 2: ...\\nAula 3: ..."
+   NÃO use espaços duplos. NÃO concatene aulas na mesma linha. Use SEMPRE \\n entre elas.
+
+5. CRITERIOS_AVALIACAO: liste 4-6 critérios alinhados ao bimestre, em linguagem PEI (protagonismo, autoria, pertencimento). Cada critério em uma linha, separados por \\n.
+
+6. Devolva APENAS um JSON válido, sem markdown, sem \`\`\`, sem nenhum texto antes ou depois.
+
+FORMATO DA RESPOSTA (JSON estrito):
+{
+  "COMPONENTE": "string em CAIXA ALTA",
+  "SERIE": "string ex: 2ª Série ou 6º Ano",
+  "BIMESTRE": "string ex: 2º",
+  "JUSTIFICATIVA": "string",
+  "APROXIMACAO": "string",
+  "TITULOS_AULAS": "string com \\n entre aulas",
+  "CONTEUDOS_AULAS": "string com \\n entre aulas",
+  "OBJETIVOS_AULAS": "string com \\n entre aulas",
+  "CRITERIOS_AVALIACAO": "string com \\n entre critérios"
+}`;
+
+async function chamarGemini(escopo) {
+  const resp = await fetch(URL_API_PROXY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+      prompt: `${PROMPT_SISTEMA}\n\n--- TEXTO COLADO PELO PROFESSOR ---\n\n${escopo}` 
+    })
+  });
+
+  if (!resp.ok) {
+    const erroCorpo = await resp.json().catch(() => ({}));
+    const msgErro = erroCorpo.error || `Status ${resp.status}`;
+    throw new Error(`Erro no Servidor Proxy: ${msgErro}`);
+  }
+
+  const data = await resp.json();
+  
+  if (!data.text) {
+    throw new Error('O servidor remoto não retornou uma resposta estruturada de texto.');
+  }
+
+  try {
+    return JSON.parse(data.text);
+  } catch (e) {
+    throw new Error('A IA não retornou um formato JSON válido.');
+  }
+}
+
+async function chamarAppsScript(dados) {
+  const resp = await fetch(URL_APPS_SCRIPT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(dados),
+    redirect: 'follow'
+  });
+
+  if (!resp.ok) {
+    throw new Error(`Apps Script retornou ${resp.status}`);
+  }
+
+  const resultado = await resp.json();
+  if (!resultado.sucesso) {
+    throw new Error('Apps Script falhou: ' + resultado.erro);
+  }
+  return resultado;
+}
+
+// Vincula o evento de clique diretamente após carregar as funções
+document.addEventListener('DOMContentLoaded', () => {
+  $('gerar').addEventListener('click', async () => {
+    const nomeProfessor = $('nomeProfessor').value.trim();
+    const escopo = $('escopo').value.trim();
+
+    if (!nomeProfessor) {
+      mostrarStatus('erro', 'Faltou seu nome', 'Preencha o campo do Passo 1 antes de gerar.');
+      return;
+    }
+    if (!escopo || escopo.length < 100) {
+      mostrarStatus('erro', 'Faltou o conteúdo', 'Cole o Guia Priorizado ou Escopo Sequência completo no campo do Passo 2.');
+      return;
+    }
+
+    // Salva o nome localmente para o próximo uso
+    localStorage.setItem('nome_prof', nomeProfessor);
+
+    const botao = $('gerar');
+    botao.disabled = true;
+    botao.textContent = 'Processando...';
+
+    try {
+      mostrarStatus('carregando', 'Etapa 1 de 2', 'A inteligência artificial está lendo e organizando o conteúdo<span class="pontos"><span>.</span><span>.</span><span>.</span></span>');
+      const camposGerados = await chamarGemini(escopo);
+
+      mostrarStatus('carregando', 'Etapa 2 de 2', 'Criando o documento no Google Drive<span class="pontos"><span>.</span><span>.</span><span>.</span></span>');
+      const dadosCompletos = {
+        NOME_PROFESSOR: nomeProfessor,
+        ...camposGerados
+      };
+      const resultado = await chamarAppsScript(dadosCompletos);
+
+      mostrarStatus('sucesso', 'Pronto! Seu Guia foi gerado.',
+        `<p><strong>${resultado.nomeArquivo}</strong></p>
+         <p style="margin-top:6px;color:var(--texto-suave);font-size:14px;">Clique no botão abaixo pra abrir o documento ou ir direto pra pasta no Drive.</p>
+         <a href="${resultado.linkDocumento}" target="_blank">Abrir documento</a>
+         <a href="${resultado.linkPasta}" target="_blank">Abrir pasta</a>`
+      );
+
+    } catch (erro) {
+      console.error(erro);
+      mostrarStatus('erro', 'Algo deu errado', erro.message);
+    } finally {
+      botao.disabled = false;
+      botao.textContent = 'Gerar Guia de Aprendizagem';
+    }
+  });
+});
+</script>
+</body>
+</html>
