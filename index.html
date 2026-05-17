@@ -8,10 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  /* ===========================================================
-     CONFIGURAÇÃO — edite a URL abaixo após publicar o Apps Script
-     =========================================================== */
-
   :root {
     --tinta: #1a1a1a;
     --papel: #f4f1ea;
@@ -45,7 +41,6 @@
     margin: 0 auto;
   }
 
-  /* === Cabeçalho === */
   header {
     border-top: 4px solid var(--linha);
     border-bottom: 1px solid var(--linha);
@@ -85,10 +80,7 @@
     color: #444;
   }
 
-  /* === Seções === */
-  .secao {
-    margin-bottom: 32px;
-  }
+  .secao { margin-bottom: 32px; }
 
   .num {
     font-family: 'JetBrains Mono', monospace;
@@ -113,9 +105,7 @@
     font-style: italic;
   }
 
-  input[type="text"],
-  input[type="password"],
-  textarea {
+  input[type="text"], input[type="password"], textarea {
     width: 100%;
     padding: 14px 16px;
     background: #fff;
@@ -127,25 +117,15 @@
     transition: border-color .15s, box-shadow .15s;
   }
 
-  input[type="text"]:focus,
-  input[type="password"]:focus,
-  textarea:focus {
+  input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     outline: none;
     border-color: var(--vermelho);
     box-shadow: 3px 3px 0 var(--linha);
   }
 
-  textarea {
-    min-height: 240px;
-    resize: vertical;
-    line-height: 1.5;
-  }
+  textarea { min-height: 240px; resize: vertical; line-height: 1.5; }
+  .pequeno { min-height: auto; }
 
-  .pequeno {
-    min-height: auto;
-  }
-
-  /* === Configurações (expansível) === */
   details {
     background: var(--papel-2);
     border: 1.5px solid var(--linha);
@@ -162,16 +142,9 @@
     font-weight: 600;
   }
 
-  details[open] summary {
-    margin-bottom: 18px;
-  }
+  details[open] summary { margin-bottom: 18px; }
+  details label { font-size: 15px; margin-top: 14px; }
 
-  details label {
-    font-size: 15px;
-    margin-top: 14px;
-  }
-
-  /* === Botão === */
   button {
     display: block;
     width: 100%;
@@ -192,3 +165,92 @@
   button::after {
     content: '→';
     position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform .2s;
+  }
+
+  button:hover:not(:disabled) { background: var(--vermelho); }
+  button:hover:not(:disabled):::after { transform: translateY(-50%) translateX(6px); }
+  button:disabled { background: #888; cursor: not-allowed; }
+
+  #status {
+    margin-top: 28px;
+    padding: 20px;
+    border: 1.5px solid var(--linha);
+    background: #fff;
+    display: none;
+  }
+
+  #status.ativo { display: block; }
+  #status.carregando { border-color: var(--azul); background: #eef3fb; }
+  #status.sucesso { border-color: #2d7a2d; background: #f0f8f0; }
+  #status.erro { border-color: var(--vermelho); background: #fbeded; }
+
+  .status-titulo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .status-titulo.carregando { color: var(--azul); }
+  .status-titulo.sucesso { color: #2d7a2d; }
+  .status-titulo.erro { color: var(--vermelho); }
+
+  #status p { font-size: 15px; }
+
+  #status a {
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 16px;
+    padding: 10px 18px;
+    background: var(--azul);
+    color: #fff;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  #status a:hover { background: var(--vermelho); }
+
+  .pontos { display: inline-block; }
+  .pontos span { animation: piscar 1.4s infinite; }
+  .pontos span:nth-child(2) { animation-delay: .2s; }
+  .pontos span:nth-child(3) { animation-delay: .4s; }
+  @keyframes piscar {
+    0%, 60%, 100% { opacity: 0.2; }
+    30% { opacity: 1; }
+  }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #777;
+    letter-spacing: 0.05em;
+  }
+
+  footer strong { color: var(--vermelho); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="eyebrow">PEI · SEDUC-SP · Consultoria do Carl</div>
+    <h1>Guia de<br>Aprendizagem <em>auto</em></h1>
+    <p class="sub">Cole o Escopo Sequência do seu bimestre. A IA estrutura, justifica e devolve o documento pronto na sua pasta do Drive.</p>
+  </header>
+
+  <details>
+    <summary>⚙ Configuração (preencher 1 vez)</summary>
+    <label for="apiKey">Chave da API Gemini</label>
+    <div class="ajuda">
