@@ -3,184 +3,369 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gerador de Guia de Aprendizagem — PEI</title>
+<title>Gerador de Guia de Aprendizagem — Prof. Carlos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --tinta: #1a1a1a;
-    --papel: #f4f1ea;
-    --papel-2: #e8e3d6;
-    --vermelho: #c1272d;
-    --azul: #1a4d8f;
-    --amarelo: #f5b800;
-    --linha: #2a2a2a;
+    --azul-profundo: #0a2540;
+    --azul-medio: #1e5bb8;
+    --azul-claro: #4a90d9;
+    --azul-celeste: #e8f0fa;
+    --azul-papel: #f4f7fb;
+    --azul-borda: #c5d6ea;
+    --dourado: #d4a017;
+    --texto: #1a2332;
+    --texto-suave: #5a6b80;
+    --branco: #ffffff;
+    --sucesso: #2d7a4f;
+    --erro: #c0392b;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body {
-    background: var(--papel);
-    color: var(--tinta);
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 17px;
-    line-height: 1.55;
+    background: var(--azul-papel);
+    color: var(--texto);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
     min-height: 100vh;
   }
 
   body {
     background-image:
-      radial-gradient(circle at 15% 10%, rgba(193, 39, 45, 0.06), transparent 50%),
-      radial-gradient(circle at 85% 90%, rgba(26, 77, 143, 0.05), transparent 45%);
-    padding: 32px 20px 80px;
+      radial-gradient(circle at 0% 0%, rgba(74, 144, 217, 0.08), transparent 40%),
+      radial-gradient(circle at 100% 100%, rgba(30, 91, 184, 0.06), transparent 50%);
+    padding: 0 0 60px;
   }
 
-  .container { max-width: 760px; margin: 0 auto; }
-
-  header {
-    border-top: 4px solid var(--linha);
-    border-bottom: 1px solid var(--linha);
-    padding: 28px 0 24px;
-    margin-bottom: 36px;
+  /* ===== CABEÇALHO ===== */
+  .hero {
+    background: linear-gradient(135deg, var(--azul-profundo) 0%, var(--azul-medio) 100%);
+    color: var(--branco);
+    padding: 48px 24px 56px;
+    position: relative;
+    overflow: hidden;
   }
 
-  .eyebrow {
-    font-family: 'JetBrains Mono', monospace;
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(212, 160, 23, 0.15), transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 820px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .selo {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
     font-size: 11px;
-    letter-spacing: 0.18em;
+    font-weight: 600;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--vermelho);
-    margin-bottom: 14px;
+    color: var(--dourado);
+    border: 1px solid rgba(212, 160, 23, 0.4);
+    padding: 6px 14px;
+    margin-bottom: 24px;
   }
 
   h1 {
     font-family: 'Fraunces', serif;
-    font-weight: 800;
-    font-size: clamp(34px, 7vw, 52px);
-    line-height: 1.02;
+    font-weight: 700;
+    font-size: clamp(32px, 6vw, 48px);
+    line-height: 1.05;
     letter-spacing: -0.02em;
-    font-variation-settings: "opsz" 144;
+    margin-bottom: 16px;
   }
 
-  h1 em { font-style: italic; font-weight: 400; color: var(--vermelho); }
+  h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--dourado);
+  }
 
-  .sub { margin-top: 16px; font-size: 16px; max-width: 560px; color: #444; }
+  .hero-sub {
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 560px;
+    line-height: 1.5;
+  }
 
-  .secao { margin-bottom: 32px; }
+  /* ===== CONTAINER ===== */
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
 
-  .num {
-    font-family: 'JetBrains Mono', monospace;
+  /* ===== TUTORIAL ===== */
+  .tutorial {
+    background: var(--branco);
+    border: 1px solid var(--azul-borda);
+    border-top: 4px solid var(--azul-medio);
+    margin-top: -32px;
+    padding: 32px;
+    position: relative;
+    box-shadow: 0 4px 24px rgba(10, 37, 64, 0.06);
+    margin-bottom: 40px;
+  }
+
+  .tutorial-titulo {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--azul-profundo);
+    margin-bottom: 6px;
+  }
+
+  .tutorial-intro {
+    color: var(--texto-suave);
+    margin-bottom: 28px;
+    font-size: 15px;
+  }
+
+  .passos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .passo {
+    position: relative;
+    padding: 20px 18px 18px;
+    background: var(--azul-celeste);
+    border-left: 3px solid var(--azul-medio);
+  }
+
+  .passo-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--azul-medio);
+    color: var(--branco);
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 16px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+  }
+
+  .passo-titulo {
+    font-weight: 600;
+    color: var(--azul-profundo);
+    margin-bottom: 6px;
+    font-size: 15px;
+  }
+
+  .passo-texto {
+    font-size: 14px;
+    color: var(--texto-suave);
+    line-height: 1.5;
+  }
+
+  /* ===== DESTAQUE ===== */
+  .destaque {
+    background: linear-gradient(to right, var(--azul-celeste), var(--branco));
+    border: 1px solid var(--azul-borda);
+    border-left: 4px solid var(--dourado);
+    padding: 20px 24px;
+    margin-bottom: 36px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .destaque-icone {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: var(--dourado);
+    color: var(--branco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 18px;
+    border-radius: 50%;
+  }
+
+  .destaque-texto {
+    font-size: 15px;
+    color: var(--texto);
+    line-height: 1.55;
+  }
+
+  .destaque-texto strong { color: var(--azul-profundo); }
+
+  /* ===== FORMULÁRIO ===== */
+  .form-card {
+    background: var(--branco);
+    border: 1px solid var(--azul-borda);
+    padding: 36px;
+    box-shadow: 0 2px 16px rgba(10, 37, 64, 0.04);
+  }
+
+  .secao { margin-bottom: 28px; }
+  .secao:last-of-type { margin-bottom: 0; }
+
+  .secao-num {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
     font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--azul);
-    margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--azul-medio);
+    background: var(--azul-celeste);
+    padding: 4px 10px;
+    margin-bottom: 10px;
   }
 
   label {
     display: block;
     font-family: 'Fraunces', serif;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 19px;
+    color: var(--azul-profundo);
     margin-bottom: 6px;
   }
 
-  .ajuda { font-size: 14px; color: #555; margin-bottom: 12px; font-style: italic; }
+  .ajuda {
+    font-size: 14px;
+    color: var(--texto-suave);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .ajuda strong { color: var(--azul-medio); }
 
   input[type="text"], textarea {
     width: 100%;
     padding: 14px 16px;
-    background: #fff;
-    border: 1.5px solid var(--linha);
-    border-radius: 0;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    color: var(--tinta);
+    background: var(--branco);
+    border: 1.5px solid var(--azul-borda);
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--texto);
     transition: border-color .15s, box-shadow .15s;
   }
 
   input[type="text"]:focus, textarea:focus {
     outline: none;
-    border-color: var(--vermelho);
-    box-shadow: 3px 3px 0 var(--linha);
+    border-color: var(--azul-medio);
+    box-shadow: 0 0 0 3px rgba(30, 91, 184, 0.12);
   }
 
-  textarea { min-height: 240px; resize: vertical; line-height: 1.5; }
+  textarea {
+    min-height: 220px;
+    resize: vertical;
+    line-height: 1.5;
+    font-family: 'Inter', sans-serif;
+  }
+
   .pequeno { min-height: auto; }
 
+  /* ===== BOTÃO ===== */
   button {
     display: block;
     width: 100%;
     padding: 18px 24px;
-    background: var(--tinta);
-    color: var(--papel);
+    margin-top: 28px;
+    background: var(--azul-medio);
+    color: var(--branco);
     border: none;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: transform .1s, background .15s;
+    transition: background .2s, transform .1s;
     position: relative;
+    box-shadow: 0 4px 12px rgba(30, 91, 184, 0.25);
   }
 
   button::after {
-    content: '→';
-    position: absolute;
-    right: 24px;
-    top: 50%;
-    transform: translateY(-50%);
+    content: ' →';
     transition: transform .2s;
+    display: inline-block;
   }
 
-  button:hover:not(:disabled) { background: var(--vermelho); }
-  button:hover:not(:disabled)::after { transform: translateY(-50%) translateX(6px); }
-  button:disabled { background: #888; cursor: not-allowed; }
+  button:hover:not(:disabled) {
+    background: var(--azul-profundo);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(10, 37, 64, 0.3);
+  }
 
+  button:hover:not(:disabled)::after {
+    transform: translateX(4px);
+  }
+
+  button:disabled {
+    background: var(--texto-suave);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* ===== STATUS ===== */
   #status {
-    margin-top: 28px;
-    padding: 20px;
-    border: 1.5px solid var(--linha);
-    background: #fff;
+    margin-top: 24px;
+    padding: 20px 24px;
+    border-radius: 4px;
+    border: 1px solid var(--azul-borda);
+    background: var(--branco);
     display: none;
   }
 
   #status.ativo { display: block; }
-  #status.carregando { border-color: var(--azul); background: #eef3fb; }
-  #status.sucesso { border-color: #2d7a2d; background: #f0f8f0; }
-  #status.erro { border-color: var(--vermelho); background: #fbeded; }
+  #status.carregando { border-color: var(--azul-medio); background: var(--azul-celeste); }
+  #status.sucesso { border-color: var(--sucesso); background: #eaf6ef; }
+  #status.erro { border-color: var(--erro); background: #fbeded; }
 
   .status-titulo {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
+    font-family: 'Fraunces', serif;
     font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 8px;
   }
 
-  .status-titulo.carregando { color: var(--azul); }
-  .status-titulo.sucesso { color: #2d7a2d; }
-  .status-titulo.erro { color: var(--vermelho); }
+  .status-titulo.carregando { color: var(--azul-medio); }
+  .status-titulo.sucesso { color: var(--sucesso); }
+  .status-titulo.erro { color: var(--erro); }
 
   #status p { font-size: 15px; }
 
   #status a {
     display: inline-block;
-    margin-top: 10px;
-    margin-right: 16px;
+    margin-top: 12px;
+    margin-right: 12px;
     padding: 10px 18px;
-    background: var(--azul);
-    color: #fff;
+    background: var(--azul-medio);
+    color: var(--branco);
     text-decoration: none;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: background .15s;
   }
 
-  #status a:hover { background: var(--vermelho); }
+  #status a:hover { background: var(--azul-profundo); }
 
   .pontos { display: inline-block; }
   .pontos span { animation: piscar 1.4s infinite; }
@@ -191,48 +376,129 @@
     30% { opacity: 1; }
   }
 
-  footer {
-    margin-top: 60px;
-    padding-top: 20px;
-    border-top: 1px solid #ccc;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: #777;
+  /* ===== ASSINATURA ===== */
+  .assinatura {
+    margin-top: 48px;
+    padding: 32px 24px;
+    text-align: center;
+    border-top: 1px solid var(--azul-borda);
+  }
+
+  .assinatura-linha {
+    width: 60px;
+    height: 2px;
+    background: var(--dourado);
+    margin: 0 auto 20px;
+  }
+
+  .assinatura-credito {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--texto-suave);
+    margin-bottom: 4px;
+  }
+
+  .assinatura-nome {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--azul-profundo);
+    letter-spacing: 0.01em;
+  }
+
+  .assinatura-titulo {
+    font-size: 13px;
+    color: var(--texto-suave);
+    margin-top: 4px;
     letter-spacing: 0.05em;
   }
 
-  footer strong { color: var(--vermelho); }
+  @media (max-width: 600px) {
+    .hero { padding: 36px 20px 44px; }
+    .tutorial, .form-card { padding: 24px 20px; }
+    .destaque { padding: 16px 18px; }
+    .container { padding: 0 16px; }
+  }
 </style>
 </head>
 <body>
+
+<!-- ===== CABEÇALHO ===== -->
+<div class="hero">
+  <div class="hero-inner">
+    <span class="selo">PEI · SEDUC-SP · Ferramenta Pedagógica</span>
+    <h1>Guia de Aprendizagem <em>automático</em></h1>
+    <p class="hero-sub">Cole o texto do bimestre e receba o Guia de Aprendizagem completo, formatado e pronto pra entregar — em menos de um minuto.</p>
+  </div>
+</div>
+
 <div class="container">
 
-  <header>
-    <div class="eyebrow">PEI · SEDUC-SP · Consultoria do Carl</div>
-    <h1>Guia de<br>Aprendizagem <em>auto</em></h1>
-    <p class="sub">Cole o Escopo Sequência do seu bimestre. A IA estrutura, justifica e devolve o documento pronto na sua pasta do Drive.</p>
-  </header>
+  <!-- ===== TUTORIAL ===== -->
+  <div class="tutorial">
+    <div class="tutorial-titulo">Como funciona</div>
+    <p class="tutorial-intro">Você só precisa fazer duas coisas. A inteligência artificial cuida do resto.</p>
 
-  <section class="secao">
-    <div class="num">01 — IDENTIFICAÇÃO</div>
-    <label for="nomeProfessor">Seu nome completo</label>
-    <input type="text" id="nomeProfessor" class="pequeno" placeholder="Ex: Carlos Roberto de Jesus dos Santos">
-  </section>
+    <div class="passos">
+      <div class="passo">
+        <div class="passo-num">1</div>
+        <div class="passo-titulo">Copie o texto</div>
+        <div class="passo-texto">Abra o <strong>Guia Priorizado</strong> ou o <strong>Escopo Sequência</strong> do seu componente curricular e selecione tudo (Ctrl+A, Ctrl+C).</div>
+      </div>
 
-  <section class="secao">
-    <div class="num">02 — ESCOPO SEQUÊNCIA</div>
-    <label for="escopo">Cole aqui o Escopo Sequência do bimestre</label>
-    <div class="ajuda">Cole o conteúdo bruto que você recebeu da SEDUC/CMSP. A IA vai identificar componente, série, bimestre, aulas, conteúdos e habilidades automaticamente.</div>
-    <textarea id="escopo" placeholder="Cole aqui o texto completo do Escopo Sequência..."></textarea>
-  </section>
+      <div class="passo">
+        <div class="passo-num">2</div>
+        <div class="passo-titulo">Cole abaixo</div>
+        <div class="passo-texto">Cole o conteúdo no campo do formulário (Ctrl+V). Não precisa formatar, organizar, nem editar nada. Cole bruto.</div>
+      </div>
 
-  <button id="gerar">Gerar Guia de Aprendizagem</button>
+      <div class="passo">
+        <div class="passo-num">3</div>
+        <div class="passo-titulo">Clique em Gerar</div>
+        <div class="passo-texto">A IA identifica componente, série, bimestre, aulas e habilidades. Em segundos, seu Guia aparece pronto no Drive.</div>
+      </div>
+    </div>
+  </div>
 
-  <div id="status"></div>
+  <!-- ===== DESTAQUE ===== -->
+  <div class="destaque">
+    <div class="destaque-icone">i</div>
+    <div class="destaque-texto">
+      <strong>É só copiar e colar.</strong> O sistema aceita tanto o <strong>Guia Priorizado</strong> quanto o <strong>Escopo Sequência</strong> — qualquer componente curricular, qualquer série, qualquer bimestre. Não precisa preencher campos extras, não precisa organizar o texto. Apenas cole e gere.
+    </div>
+  </div>
 
-  <footer>
-    <strong>Consultoria do Carl</strong> · Uso pessoal · v1.2
-  </footer>
+  <!-- ===== FORMULÁRIO ===== -->
+  <div class="form-card">
+
+    <section class="secao">
+      <div class="secao-num">PASSO 1</div>
+      <label for="nomeProfessor">Seu nome completo</label>
+      <div class="ajuda">Aparece no campo "Professor" do Guia. Fica salvo no seu navegador — você só preenche uma vez.</div>
+      <input type="text" id="nomeProfessor" class="pequeno" placeholder="Ex: Carlos Roberto de Jesus dos Santos">
+    </section>
+
+    <section class="secao">
+      <div class="secao-num">PASSO 2</div>
+      <label for="escopo">Cole aqui o Guia Priorizado ou o Escopo Sequência</label>
+      <div class="ajuda">Selecione todo o conteúdo do bimestre e cole abaixo. Pode ser o texto inteiro, com listas, títulos, habilidades — <strong>do jeito que veio</strong>. A IA organiza pra você.</div>
+      <textarea id="escopo" placeholder="Cole aqui o conteúdo completo do Guia Priorizado ou Escopo Sequência..."></textarea>
+    </section>
+
+    <button id="gerar">Gerar Guia de Aprendizagem</button>
+
+    <div id="status"></div>
+
+  </div>
+
+  <!-- ===== ASSINATURA ===== -->
+  <div class="assinatura">
+    <div class="assinatura-linha"></div>
+    <div class="assinatura-credito">Desenvolvido pelo</div>
+    <div class="assinatura-nome">Professor Carlos</div>
+    <div class="assinatura-titulo">CONSULTORIA DO CARL</div>
+  </div>
 
 </div>
 
@@ -265,12 +531,13 @@ function mostrarStatus(tipo, titulo, html) {
     <div class="status-titulo ${tipo}">${titulo}</div>
     <div>${html}</div>
   `;
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 
 const PROMPT_SISTEMA = `Você é um especialista em planejamento pedagógico da rede pública paulista (SEDUC-SP), com domínio do Currículo Paulista, da BNCC e do modelo das Escolas de Tempo Integral (PEI).
 
-Sua tarefa: analisar o Escopo Sequência colado pelo professor e devolver um JSON com os campos para preencher o Guia de Aprendizagem.
+Sua tarefa: analisar o Guia Priorizado ou Escopo Sequência colado pelo professor e devolver um JSON com os campos para preencher o Guia de Aprendizagem.
 
 REGRAS:
 1. Identifique automaticamente componente curricular, série e bimestre a partir do texto.
@@ -306,7 +573,7 @@ async function chamarGemini(escopo) {
 
   const body = {
     contents: [{
-      parts: [{ text: `${PROMPT_SISTEMA}\n\n--- ESCOPO SEQUÊNCIA COLADO PELO PROFESSOR ---\n\n${escopo}` }]
+      parts: [{ text: `${PROMPT_SISTEMA}\n\n--- TEXTO COLADO PELO PROFESSOR ---\n\n${escopo}` }]
     }],
     generationConfig: {
       temperature: 0.4,
@@ -361,33 +628,34 @@ $('gerar').addEventListener('click', async () => {
   const nomeProfessor = $('nomeProfessor').value.trim();
   const escopo = $('escopo').value.trim();
 
-  if (!nomeProfessor) return mostrarStatus('erro', '⚠ Faltou', 'Digite seu nome completo.');
-  if (!escopo || escopo.length < 100) return mostrarStatus('erro', '⚠ Faltou', 'Cole o Escopo Sequência completo (parece curto demais).');
+  if (!nomeProfessor) return mostrarStatus('erro', 'Faltou seu nome', 'Preencha o campo do Passo 1 antes de gerar.');
+  if (!escopo || escopo.length < 100) return mostrarStatus('erro', 'Faltou o conteúdo', 'Cole o Guia Priorizado ou Escopo Sequência completo no campo do Passo 2. O texto parece curto demais.');
 
   const botao = $('gerar');
   botao.disabled = true;
   botao.textContent = 'Processando...';
 
   try {
-    mostrarStatus('carregando', '◷ Etapa 1 de 2', 'Gemini analisando o Escopo Sequência<span class="pontos"><span>.</span><span>.</span><span>.</span></span>');
+    mostrarStatus('carregando', 'Etapa 1 de 2', 'A inteligência artificial está lendo e organizando o conteúdo<span class="pontos"><span>.</span><span>.</span><span>.</span></span>');
     const camposGerados = await chamarGemini(escopo);
 
-    mostrarStatus('carregando', '◷ Etapa 2 de 2', 'Criando o documento no Google Drive<span class="pontos"><span>.</span><span>.</span><span>.</span></span>');
+    mostrarStatus('carregando', 'Etapa 2 de 2', 'Criando o documento no Google Drive<span class="pontos"><span>.</span><span>.</span><span>.</span></span>');
     const dadosCompletos = {
       NOME_PROFESSOR: nomeProfessor,
       ...camposGerados
     };
     const resultado = await chamarAppsScript(dadosCompletos);
 
-    mostrarStatus('sucesso', '✓ Pronto',
-      `<p>Guia gerado: <strong>${resultado.nomeArquivo}</strong></p>
+    mostrarStatus('sucesso', 'Pronto! Seu Guia foi gerado.',
+      `<p><strong>${resultado.nomeArquivo}</strong></p>
+       <p style="margin-top:6px;color:var(--texto-suave);font-size:14px;">Clique no botão abaixo pra abrir o documento ou ir direto pra pasta no Drive.</p>
        <a href="${resultado.linkDocumento}" target="_blank">Abrir documento</a>
        <a href="${resultado.linkPasta}" target="_blank">Abrir pasta</a>`
     );
 
   } catch (erro) {
     console.error(erro);
-    mostrarStatus('erro', '✗ Erro', erro.message);
+    mostrarStatus('erro', 'Algo deu errado', erro.message);
   } finally {
     botao.disabled = false;
     botao.textContent = 'Gerar Guia de Aprendizagem';
